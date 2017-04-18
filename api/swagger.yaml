@@ -1,0 +1,145 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: lxcapp API
+  description: "lxcapp 相关接口\n\n
+  #### 数据返回\n\n```json\n{\n  \"CompleteCode\":
+    0\n  \"ReasonCode\": \"400\",\n  \"ReasonMessage\": \"异常原因，正常返回则为空字符串\",\n  \"Data\":
+    {} //返回结果\n}\n```\n"
+schemes:
+- https
+- http
+tags:
+- name: tools
+  description: kubernetes node healt check !
+- name: application
+  description: 查询已经安装的Application,详情 以及监控信息
+- name: appstore
+  description: 安装，卸载 查询AppPackage package列表
+produces:
+- application/json
+- application/text
+- application/pdf
+- text/plain; charset=utf-8
+consumes:
+- application/json
+paths:
+  "/lxcapp/Contriner/list":
+    get:
+      tags:
+      - appstore
+      summary: search packages
+      description: 默认没有参数
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ResponseBO"
+    post:
+      summary: upload package
+      description: Pakage app Load up down;
+      consumes:
+      - multipart/form-data
+      parameters:
+      - name: jsonconf
+        in: formData
+        description: 参数
+        required: true
+        type: string
+      - name: file
+        in: formData
+        description: The uploaded file data
+        required: true
+        type: file
+      tags:
+      - appstore
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ResponseBO"
+  "/lxcapp/Contriner/{Contrinerid}":
+      delete:
+        summary: del apppackage
+        description: 根据App_ID, 进行卸载,AppPackage
+        tags:
+        - appstore
+        parameters:
+        - name: Contrinerid
+          description: 通过已经安装或运行的packid来卸载应用
+          in: path
+          type: string
+          required: true
+        responses:
+          '200':
+            description: OK
+            schema:
+              "$ref": "#/definitions/ResponseBO"
+  "/lxcapp/Contriner/{Contrinerid}/config":
+    get:
+      tags:
+      - appstore
+      summary: 查询APPStroe
+      description: 默认没有参数
+      parameters:
+      - name: Contrinerid
+        description: Contrinerid
+        in: path
+        type: string
+        required: true
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ResponseBO"
+    post:
+      summary: upload package
+      description: Pakage app Load up down;
+      consumes:
+      - multipart/form-data
+      parameters:
+      - name: jsonconf
+        in: formData
+        description: 参数
+        required: true
+        type: string
+      - name: Contrinerid
+        description: Contrinerid
+        in: path
+        type: string
+        required: true
+      tags:
+      - appstore
+      responses:
+        '200':
+          description: OK
+          schema:
+            "$ref": "#/definitions/ResponseBO"
+
+
+definitions:
+  ResponseBO:
+    type: object
+    properties:
+      CompleteCode:
+        type: integer
+        description: 完成码，0表示请求过程正常，-1表示请求过程异常
+      ReasonCode:
+        type: string
+        description: 异常原因的代码
+      ReasonMessage:
+        type: string
+        description: 异常原因具体信息
+      Data:
+        type: object
+        description: 返回值的具体信息
+  config:
+    type: object
+    properties:
+      data:
+        type: object
+        description: send obj
+# basePath: "/"
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /zmatsh/lxcapp/1.0.0
